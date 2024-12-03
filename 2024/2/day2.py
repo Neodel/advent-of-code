@@ -22,3 +22,23 @@ for report in reports:
             safe_count += 1
 
 print("Le résultat est : " + str(safe_count) + ".")
+
+######################
+####### PART 2 #######
+######################
+
+def is_almost_safe(report):
+    if not is_safe(report):
+        for i in range(len(report)):
+            modified_report = report[:i] + report[i + 1:]
+            if is_safe(modified_report):
+                return True
+        return False
+    return True
+
+safe_count = 0
+for report in reports:
+    if is_almost_safe(report):
+        safe_count += 1
+
+print("Le nouveau résultat est : " + str(safe_count) + ".")
