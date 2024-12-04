@@ -38,9 +38,9 @@ def process_mul_expressions_with_do_dont(input_text):
             flag = False
         else:
             if flag:
-                x, y = map(int, match[4:-1].split(','))
-                result += x * y
-    return result
+                a, b = match.groups()
+                result += int(a) * int(b)
+        return result
 
 result = 0
 with open(filename, "r") as f:
