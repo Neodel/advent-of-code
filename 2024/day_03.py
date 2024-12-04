@@ -1,50 +1,33 @@
-######################
-####### PART 1 #######
-######################
-
 import re
 
-def process_mul_expressions(input_text):
-    pattern = r"mul\((\d+),(\d+)\)"
-    matches = re.findall(pattern, input_text)
+import aoc_lube
 
-    result = sum(int(x) * int(y) for x, y in matches)
+RAW = aoc_lube.fetch(year=2024, day=3)
+MUL_RE = re.compile(r"mul\((\d{1,3}),(\d{1,3})\)")
+COMMAND_RE = re.compile(r"mul\((\d{1,3}),(\d{1,3})\)|do\(\)|don't\(\)")
 
-    return result
 
-filename = "data"
-result = 0
+def part_one():
+    total = 0
+    for match in MUL_RE.finditer(RAW):
+        a, b = match.groups()
+        total += int(a) * int(b)
+    return total
 
-with open(filename, "r") as f:
-    for line in f:
-        result += process_mul_expressions(line)
 
-print("Le résultat est : " + str(result) + ".")
+def part_two():
+    enabled = True
+    total = 0
+    for match in COMMAND_RE.finditer(RAW):
+        if match[0] == "do()":
+            enabled = True
+        elif match[0] == "don't()":
+            enabled = False
+        elif enabled:
+            a, b = match.groups()
+            total += int(a) * int(b)
+    return total
 
-######################
-####### PART 2 #######
-######################
 
-def process_mul_expressions_with_do_dont(input_text):
-    pattern = r"mul\(\d{1,3},\d{1,3}\)|do\(\)|don't\(\)"
-    matches = re.findall(pattern, input_text)
-
-    result = 0
-    flag = True
-    for match in matches:
-        if match == "do()":
-            flag = True
-        elif match == "don't()":
-            flag = False
-        else:
-            if flag:
-                a, b = match.groups()
-                result += int(a) * int(b)
-        return result
-
-result = 0
-with open(filename, "r") as f:
-    for line in f:
-        result += process_mul_expressions_with_do_dont(line)
-
-print("Le nouveau résultat est : " + str(result) + ".")
+aoc_lube.submit(year=2024, day=3, part=1, solution=part_one)
+aoc_lube.submit(year=2024, day=3, part=2, solution=part_two)
